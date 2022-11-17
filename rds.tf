@@ -1,5 +1,5 @@
 ##########################################################
-///RDSの定義
+///RDS
 ##########################################################
 resource "aws_db_instance" "mysql" {
   allocated_storage      = 10
@@ -8,9 +8,9 @@ resource "aws_db_instance" "mysql" {
   engine_version         = "5.7"
   identifier             = "${var.project}-${var.environment}-mysql"
   instance_class         = "db.t2.micro"
-  name                   = "db_name"   #secrets managerはmust
-  username               = "foo"       #secrets managerはmust
-  password               = "foobarbaz" #secrets managerはmust
+  name                   = "db_name"  #secrets managerはmust
+  username               = "username" #secrets managerはmust
+  password               = "password" #secrets managerはmust
   parameter_group_name   = "default.mysql5.7"
   multi_az               = false
   availability_zone      = "ap-northeast-1a"
@@ -25,7 +25,7 @@ resource "aws_db_instance" "mysql" {
   }
 }
 ##########################################################
-///DBサブネットグループの定義
+///DBサブネットグループ
 ##########################################################
 resource "aws_db_subnet_group" "dbsubnet" {
   name       = "${var.project}-${var.environment}-dbsubnet"

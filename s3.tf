@@ -1,7 +1,7 @@
 # ---------------------------------------------
 # S3 static bucket
 # ---------------------------------------------
-resource "aws_s3_bucket" "bucket" {
+resource "aws_s3_bucket" "website_bucket" {
   bucket = "${var.project}-${var.environment}-static-contens-terraform"
   acl    = "private"
 
@@ -12,14 +12,14 @@ resource "aws_s3_bucket" "bucket" {
 }
 
 # ---------------------------------------------
-# バケットポリシー
+# bucket policy
 # ---------------------------------------------
-resource "aws_s3_bucket_policy" "bucket" {
-  bucket = aws_s3_bucket.bucket.id
-  policy = data.aws_iam_policy_document.bucket.json
+resource "aws_s3_bucket_policy" "website_bucket" {
+  bucket = aws_s3_bucket.website_bucket.id
+  policy = data.aws_iam_policy_document.website_bucket.json
 }
 
-data "aws_iam_policy_document" "bucket" {
+data "aws_iam_policy_document" "website_bucket" {
   statement {
     sid    = "Allow CloudFront"
     effect = "Allow"
@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "bucket" {
     ]
 
     resources = [
-      "${aws_s3_bucket.bucket.arn}/*"
+      "${aws_s3_bucket.website_bucket.arn}/*"
     ]
   }
 }

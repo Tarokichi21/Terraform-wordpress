@@ -1,17 +1,12 @@
-# provider "aws" {
-#   profile = "default"
-#   region  = "ap-northeast-1"
-# }
-
-
 ##########################################################
 ///EC2 ~publicサブネットaに配置
 ##########################################################
 resource "aws_instance" "a" {
-  ami                    = "ami-078296f82eb463377"
-  vpc_security_group_ids = [aws_security_group.for_webserver_ec2.id]
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.public_a.id
+  ami           = "ami-078296f82eb463377"
+  vpc_security_group_ids =[aws_security_group.for_webserver_ec2.id]
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.public_a.id
+
   tags = {
     Name    = "${var.project}-${var.environment}-a"
     Project = var.project

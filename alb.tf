@@ -1,11 +1,7 @@
-# provider "aws" {
-#   profile = "default"
-#   region  = "ap-northeast-1"
-# }
 
-##########################################################
-///ALBの定義
-##########################################################
+# ---------------------------------------------
+# ALB
+# ---------------------------------------------
 resource "aws_lb" "for_webserver" {
   name               = "webserver-alb"
   internal           = false #falseを指定するとインターネット向け,trueを指定すると内部向け
@@ -20,10 +16,9 @@ resource "aws_lb" "for_webserver" {
     aws_subnet.public_c.id,
   ]
 }
-##########################################################
-///ALBに付与するセキュリティグループの定義
-##########################################################
-
+# ---------------------------------------------
+# ALB-sg
+# ---------------------------------------------
 resource "aws_security_group" "alb_sg" {
   name   = "${var.project}-${var.environment}-alb-sg"
   vpc_id = aws_vpc.vpc.id
@@ -59,9 +54,9 @@ resource "aws_security_group_rule" "alb_out_ec2" {
   to_port           = 0
   cidr_blocks       = ["0.0.0.0/0"]
 }
-##########################################################
-///ALBのリスナーの定義
-##########################################################
+# ---------------------------------------------
+# ALB-listener
+# ---------------------------------------------
 ///リスナールールの定義（HTTP）
 # resource "aws_lb_listener" "forward_HTTP" {
 #   load_balancer_arn = aws_lb.for_webserver.arn
@@ -86,9 +81,9 @@ resource "aws_lb_listener" "forward_HTTPS" {
     target_group_arn = aws_lb_target_group.for_webserver.arn
   }
 }
-##########################################################
-///ALBのターゲットグループの定義
-##########################################################
+# ---------------------------------------------
+# ALB-target-group
+# ---------------------------------------------
 resource "aws_lb_target_group" "for_webserver" {
   name     = "${var.project}-${var.environment}-app-tg"
   port     = 80
