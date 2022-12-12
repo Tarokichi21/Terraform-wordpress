@@ -1,7 +1,10 @@
 # ---------------------------------------------
-# Certificate
+# AWS Certificate Manager
+# ---------------------------------------------
+
 # ---------------------------------------------
 # for tokyo region
+# ---------------------------------------------
 resource "aws_acm_certificate" "tokyo_cert" {
   domain_name       = "*.${var.domain}"
   validation_method = "DNS" #検証方法
@@ -41,8 +44,9 @@ resource "aws_acm_certificate_validation" "cert_valid" {
   validation_record_fqdns = [for record in aws_route53_record.route53_acm_dns_resolve : record.fqdn] #DNS検証に用いられるFQDN
 }
 
-
+# ---------------------------------------------
 # for virginia region
+# ---------------------------------------------
 resource "aws_acm_certificate" "virginia_cert" {
   provider = aws.virginia #main.tfのaliasが上書きされる
 

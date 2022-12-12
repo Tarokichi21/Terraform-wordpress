@@ -2,9 +2,9 @@
 #     profile = "default"
 #     region  = "ap-northeast-1"
 # }
-##########################################################
-///VPC
-##########################################################
+# ---------------------------------------------
+# VPC
+# ---------------------------------------------
 resource "aws_vpc" "vpc" {
   cidr_block                       = "10.0.0.0/16"
   instance_tenancy                 = "default" #ハードウェア占有インスタンスを立てるかどうか
@@ -70,7 +70,7 @@ resource "aws_route_table" "public" {
   }
 }
 # ---------------------------------------------
-///パブリックルートの定義（IGWに接続する）
+# public route（IGW）
 # ---------------------------------------------
 resource "aws_route" "public" {
   route_table_id         = aws_route_table.public.id
@@ -78,7 +78,7 @@ resource "aws_route" "public" {
   destination_cidr_block = "0.0.0.0/0"
 }
 # ---------------------------------------------
-///パブリックルートテーブルと関連付け
+# association
 # ---------------------------------------------
 resource "aws_route_table_association" "public_a" {
   subnet_id      = aws_subnet.public_a.id
@@ -88,9 +88,9 @@ resource "aws_route_table_association" "public_c" {
   subnet_id      = aws_subnet.public_c.id
   route_table_id = aws_route_table.public.id
 }
-##########################################################
-///プライベートサブネット
-##########################################################
+# ---------------------------------------------
+# private subnet
+# ---------------------------------------------
 resource "aws_subnet" "private_a" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = "10.0.5.0/24"
@@ -116,9 +116,9 @@ resource "aws_subnet" "private_c" {
     Type    = "private"
   }
 }
-##########################################################
+# ---------------------------------------------
 # Elasti IP
-##########################################################
+# ---------------------------------------------
 resource "aws_eip" "nat_a" {
   vpc = true
 
@@ -126,9 +126,9 @@ resource "aws_eip" "nat_a" {
     Name = "natgw-eip"
   }
 }
-##########################################################
+# ---------------------------------------------
 # NAT Gateway
-##########################################################
+# ---------------------------------------------
 resource "aws_nat_gateway" "nat_a" {
   subnet_id     = aws_subnet.public_a.id # NAT Gatewayを配置するSubnetを指定
   allocation_id = aws_eip.nat_a.id       # 紐付けるElasti IP
@@ -137,9 +137,9 @@ resource "aws_nat_gateway" "nat_a" {
     Name = "natgw-a"
   }
 }
-##########################################################
+# ---------------------------------------------
 # Route Table (Private)
-##########################################################
+# ---------------------------------------------
 resource "aws_route_table" "private_a" {
   vpc_id = aws_vpc.vpc.id
 
@@ -161,9 +161,9 @@ resource "aws_route_table" "private_c" {
     Type    = "private"
   }
 }
-##########################################################
-# Route (Private)
-##########################################################
+# ---------------------------------------------
+# route (private)
+# ---------------------------------------------
 resource "aws_route" "private_a" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.private_a.id
@@ -176,9 +176,9 @@ resource "aws_route" "private_c" {
   nat_gateway_id         = aws_nat_gateway.nat_a.id
 }
 
-##########################################################
-# Association (Private)
-##########################################################
+# ---------------------------------------------
+# association (private)
+# ---------------------------------------------
 resource "aws_route_table_association" "private_a" {
   subnet_id      = aws_subnet.private_a.id
   route_table_id = aws_route_table.private_a.id

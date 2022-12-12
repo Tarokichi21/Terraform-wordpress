@@ -1,6 +1,6 @@
-##########################################################
-///EC2 ~publicサブネットaに配置
-##########################################################
+# ---------------------------------------------
+# EC2 ~public-subnet-a~
+# ---------------------------------------------
 resource "aws_instance" "a" {
   ami           = "ami-078296f82eb463377"
   vpc_security_group_ids =[aws_security_group.for_webserver_ec2.id]
@@ -48,9 +48,9 @@ resource "aws_instance" "a" {
   chown apache:apache -R /var/www/html
   EOF
 }
-##########################################################
-///EC2 ~publicサブネットcに配置
-##########################################################
+# ---------------------------------------------
+# EC2 ~public-subnet-c~
+# ---------------------------------------------
 # resource "aws_instance" "c" {
 #   ami                    ="ami-0c3fd0f5d33134a76"
 #   vpc_security_group_ids =[aws_security_group.for_webserver_ec2.id]
@@ -92,9 +92,9 @@ resource "aws_instance" "a" {
 # chown apache:apache -R /var/www/html
 # EOF
 # }
-##########################################################
-///EC2用のSG
-##########################################################
+# ---------------------------------------------
+# EC2 ~sg~
+# ---------------------------------------------
 resource "aws_security_group" "for_webserver_ec2" {
   name   = "${var.project}-${var.environment}-for_webserver_ec2"
   vpc_id = aws_vpc.vpc.id

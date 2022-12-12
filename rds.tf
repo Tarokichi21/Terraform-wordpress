@@ -1,6 +1,6 @@
-##########################################################
-///RDS
-##########################################################
+# ---------------------------------------------
+# RDS
+# ---------------------------------------------
 resource "aws_db_instance" "mysql" {
   allocated_storage      = 10
   storage_type           = "gp2"
@@ -24,9 +24,9 @@ resource "aws_db_instance" "mysql" {
     Env     = var.environment
   }
 }
-##########################################################
-///DBサブネットグループ
-##########################################################
+# ---------------------------------------------
+# subnet-group
+# ---------------------------------------------
 resource "aws_db_subnet_group" "dbsubnet" {
   name       = "${var.project}-${var.environment}-dbsubnet"
   subnet_ids = [aws_subnet.private_a.id, aws_subnet.private_c.id]
@@ -37,9 +37,9 @@ resource "aws_db_subnet_group" "dbsubnet" {
     Env     = var.environment
   }
 }
-##########################################################
-///RDS用のSG
-##########################################################
+# ---------------------------------------------
+# RDS ~sg~
+# ---------------------------------------------
 
 resource "aws_security_group" "for_rds" {
   name   = "${var.project}-${var.environment}-for_rds"

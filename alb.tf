@@ -17,7 +17,7 @@ resource "aws_lb" "for_webserver" {
   ]
 }
 # ---------------------------------------------
-# ALB-sg
+# ALB ~sg~
 # ---------------------------------------------
 resource "aws_security_group" "alb_sg" {
   name   = "${var.project}-${var.environment}-alb-sg"
@@ -55,9 +55,10 @@ resource "aws_security_group_rule" "alb_out_ec2" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 # ---------------------------------------------
-# ALB-listener
+# ALB ~Listener~
 # ---------------------------------------------
-///リスナールールの定義（HTTP）
+
+///Listener-Rule（HTTP）
 # resource "aws_lb_listener" "forward_HTTP" {
 #   load_balancer_arn = aws_lb.for_webserver.arn
 #   port              = "80"
@@ -68,7 +69,7 @@ resource "aws_security_group_rule" "alb_out_ec2" {
 #   }
 # }
 
-///リスナールールの定義（HTTPS）
+///Listener-Rule（HTTPS）
 resource "aws_lb_listener" "forward_HTTPS" {
   load_balancer_arn = aws_lb.for_webserver.arn
   port              = "443"
@@ -82,7 +83,7 @@ resource "aws_lb_listener" "forward_HTTPS" {
   }
 }
 # ---------------------------------------------
-# ALB-target-group
+# ALB ~target-group~
 # ---------------------------------------------
 resource "aws_lb_target_group" "for_webserver" {
   name     = "${var.project}-${var.environment}-app-tg"
@@ -96,9 +97,9 @@ resource "aws_lb_target_group" "for_webserver" {
     Env     = var.environment
   }
 }
-
-///ターゲットグループをインスタンスに紐づける
-
+# ---------------------------------------------
+# ALB ~target-group link to EC2~
+# ---------------------------------------------
 resource "aws_lb_target_group_attachment" "for_webserver_a" {
   target_group_arn = aws_lb_target_group.for_webserver.arn
   target_id        = aws_instance.a.id
